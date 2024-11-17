@@ -1,0 +1,202 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html,
+body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: "Lexend Deca";
+    font-size: 16px;
+}
+
+#map {
+  height: 100vh;
+  /* width: 100%; */
+  position: relative;
+}
+
+
+.main-sidebar {
+  @apply bg-offWhite;
+  position: absolute;
+  /* width: 200px; */
+  max-height: 95vh;
+  min-width: 300px;
+  max-width: 500px;
+  height: 95vh;
+  top: 1.5rem;
+  right: 1.5rem;
+  
+  border-radius: 15px;
+}
+.secondary-sidebar {
+  @apply bg-offWhite;
+  position: absolute;
+  /* width: 200px; */
+  max-height: 80vh;
+  min-width: 300px;
+  max-width: 500px;
+  height: 95vh;
+  bottom: 6rem;
+  left: 1.5rem;
+  
+  border-radius: 15px;
+}
+
+.sidebar-page {
+  padding: 16px;
+}
+
+button {
+  @apply bg-myprimary text-offWhite;
+  /* color: black;
+  background-color: #D3FFFF; */
+  padding: 0.4rem 2rem;
+  border-radius: 15px;
+}
+
+button:disabled {
+  @apply opacity-60
+}
+
+/* button:hover {
+  transform: scale(1.05);
+} */
+
+hr {
+  margin: 3px 0px 3px 0px;
+  border-top-width: 1px;
+  border-color: rgb(158, 154, 154);
+}
+
+.modal-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400;
+  border: 2px solid #000;
+  background-color: white;
+  padding: 20px;
+  border: none;
+  border-radius: 15px;
+}
+
+h1 {
+  font-size: 1.5rem;
+}
+
+h2 {
+  font-size: 1.3rem;
+}
+
+
+.myScrollbar::-webkit-scrollbar {
+  width: 30px; /* widen width but reduce thumb width so it looks like it has padding to the side */
+  /* guide lines for scroll bar uncomment if you want to show even when not hovering on container */
+  border: 6px solid rgba(0, 0, 0, 0);
+  box-shadow: inset 0 0 5px rgb(200, 200, 200);
+}
+
+.myScrollbar::-webkit-scrollbar-thumb {
+  /* thumb width reduced by creating thick transparent border */
+  border: 5px solid rgba(0, 0, 0, 0);
+  background-clip: padding-box;
+  border-radius: 9999px;
+
+  background-color: grey;
+}
+
+.myScrollbar:hover::-webkit-scrollbar {
+  /* same with the guidelines but made it much thinner than thumb scroll
+    (so much thicker border)
+  */
+  border: 7px solid rgba(0, 0, 0, 0);
+  box-shadow: inset 0 0 5px rgb(200, 200, 200);
+}
+
+#instructions-content > p {
+  margin-bottom: 1rem;
+}
+
+#instructions-content li {
+  margin-bottom: 0.4rem;
+}
+
+.modal-box:focus{
+  outline: none;
+ }
+
+
+ @keyframes pulse {
+  0% {
+    box-shadow: 0 0 0px rgba(255, 105, 180, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 105, 180, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 0px rgba(255, 105, 180, 0.5);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulseSize {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05); /* Slight increase in size */
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pulse-animate {
+  animation: pulse 1.5s infinite;
+}
+
+.shake-animate {
+  animation: shake 0.5s ease-in-out infinite;
+}
+
+.bounce-animate {
+  animation: bounce 1s infinite;
+}
+
+.pulse-size-animate {
+  animation: pulseSize 1.5s infinite ease-in-out; /* Smooth pulsing effect */
+}
+
+.pulse-size-animate:hover {
+  transform: scale(1.05); /* Slightly larger on hover for interaction */
+  animation: none; /* Stop pulsing on hover */
+}
+

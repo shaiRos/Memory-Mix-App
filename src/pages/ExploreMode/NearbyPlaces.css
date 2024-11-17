@@ -1,0 +1,19 @@
+.nearbyPlaces-carousel-img-preview {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+
+.nearbyPlaces-carousel-preview-container {
+    /* @apply bg-highlightColorLight; */
+    border-radius: 15px;
+    min-width: 150px;
+    
+    
+}
+
+.nearbyPlaces-carousel-content {
+    padding: 2px 8px;
+}

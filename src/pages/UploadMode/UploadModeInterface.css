@@ -1,0 +1,8 @@
+
+
+#exit-text {
+    background-color: hsla(0, 0%, 100%, 0.70);
+    padding: 5px;
+    border-radius:  0px 5px 5px 0px;
+    transform: translateX(-1px);
+}
