@@ -78,7 +78,7 @@ export default function AlbumSelectorWindow() {
             <div className='secondary-sidebar'>
                 <div className="sidebar-page">
 
-                    <h2 className="text-center">Memory Mix Albums</h2>
+                    <h2 className="text-center mb-3">Memory Mix Albums</h2>
                     <div className="album-list-container">
                         {
                             albumsList.map((album: PhotoAlbum) =>

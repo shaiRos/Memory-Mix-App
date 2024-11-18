@@ -15,7 +15,7 @@ import { Box, Modal } from '@mui/material';
 function App() {
   const { isUploadMode, setIsUploadMode, albumSelectionOpen,setAlbumSelectionOpen } = useMainAppContext()
   const {currentMemoryAlbum} = useIndexDB()
-  const [instructionsOpen,setInstructionsOpen] = useState(true)
+  const [instructionsOpen,setInstructionsOpen] = useState(false)
 
   useEffect(() => {
     const isFirstVisit = JSON.parse(localStorage.getItem('firstVisit'));

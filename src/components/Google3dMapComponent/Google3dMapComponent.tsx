@@ -23,10 +23,11 @@ export default function Google3DMapComponent() {
 
 	useEffect(() => {
 		if (!map) return
+		
 		const photosWithLocations = albumImageCollection.filter((m: PhotoObject) => m.locationInput).map((p: PhotoObject) => p.location)
+		deleteAllMarkers()
 		if (isUploadMode && photosWithLocations.length > 0) {
 			map.stopCameraAnimation()
-			deleteAllMarkers()
 			const bounds = addMarkerGroupToMap(map, photosWithLocations)
 			const { centerBounds, range } = getCenterAndRangeFromBounds(bounds)
 			const centerlat = centerBounds.lat()
