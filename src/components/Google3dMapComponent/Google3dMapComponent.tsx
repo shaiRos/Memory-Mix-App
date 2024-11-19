@@ -7,11 +7,22 @@ import { addMarkerGroupToMap, deleteAllMarkers, getCenterAndRangeFromBounds } fr
 import { getRandomBetween } from "../../utils/mapping_utils";
 import {config} from '../../../google.config'
 
+let apiConfig = {
+	loaderConfig: config?.loaderConfig
+}
+
+if (import.meta.env.VITE_GOOGLE_API_KEY) {
+	apiConfig.loaderConfig = {
+		apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
+		version: "alpha",
+	}
+}
+
 export default function Google3DMapComponent() {
 	const { map, setMap, setIsUploadMode } = useMainAppContext()
 	const infoWindowRef = useRef()
 
-	const loader = new Loader(config.loaderConfig);
+	const loader = new Loader(apiConfig.loaderConfig);
 	const {
 		db, setDB,
 		dbStore,
