@@ -9,7 +9,7 @@ With node js and npm installed, run:
 
 > npm install
 
-*Important!! edit the config file "/google.config.ts" with your API Key. Key is imported inside the file: src/components/Google3dMapComponent/Google3dMapComponent.tsx
+*Important!! edit the config file "/google.config.ts" with your API Key. Key is imported inside the file: /components/Google3dMapComponent/Google3dMapComponent.tsx
 
 ## Run in development mode (auto-reload on save)
 This will run the app in a development mode that will reload the server whenever you make changes to the application.
