@@ -74,19 +74,32 @@ export function IndexDBProvider({ children }) {
 
     // Open the IndexedDB database
     useEffect(() => {
-        const request = indexedDB.open(dbName, 2);
+        const request = indexedDB.open(dbName, 3);
 
         request.onupgradeneeded = function (event) {
             const db = event.target.result;
-            const photoStore = db.createObjectStore(PHOTO_DBSTORE, { keyPath: 'originalFileName', autoIncrement: true });
+            const oldVersion = event.oldVersion; // This tells you the user's current version.
+            const newVersion = event.newVersion; // This is the version you're upgrading to.
+
+            console.log(`Upgrading database from version ${oldVersion} to ${newVersion}, old data will be deleted!`);
+            console.log(db.objectStoreNames)
+
+            // Delete all existing object stores
+            Array.from(db.objectStoreNames).forEach((storeName) => {
+                db.deleteObjectStore(storeName);
+                console.log(`Deleted store: ${storeName}`);
+            });
+
+            // Create new stores or updated schema
+            const photoStore = db.createObjectStore(PHOTO_DBSTORE, { keyPath: 'albumPhotoID', autoIncrement: true });
             const photoMemoryAlbumsStore = db.createObjectStore(PHOTO_ALBUM_DBSTORE, { keyPath: 'albumID' });
 
             photoStore.createIndex('memoryAlbumID', 'memoryAlbumID', { unique: false })
+            photoStore.createIndex('albumPhotoID', 'albumPhotoID', {unique:true})
             photoStore.createIndex('originalFileName', 'originalFileName')
             photoStore.createIndex('CreateDate','CreateDate', {unique: false})
             photoStore.createIndex('UploadDate','UploadDate', {unique: false})
             photoStore.createIndex('locationInput','locationInput', {unique: false})
-
 
             photoMemoryAlbumsStore.createIndex('displayName', 'displayName')
         };
@@ -182,8 +195,8 @@ export function IndexDBProvider({ children }) {
             const success = []
             const error = []
 
-            const storePromises = photoObjects.map(obj => {
-                const photoData = { ...obj, memoryAlbumID: currentMemoryAlbum.albumID }
+            const storePromises = photoObjects.map((obj : PhotoObject) => {
+                const photoData = { ...obj, memoryAlbumID: currentMemoryAlbum.albumID, albumPhotoID:  `${currentMemoryAlbum.albumID}@${obj.originalFileName}`}
                 return storePhotoObject(store,photoData)
             } )
 
@@ -191,6 +204,7 @@ export function IndexDBProvider({ children }) {
             // ## TODO handle files that should be uploaded to multiple albums
             for (let queries of results) {
                 if (queries.status === "rejected") {
+                    console.log(queries)
                     // Key already exists in the object store.
 
                     // if it does, find if it has the same album id that we are uploading to
@@ -239,7 +253,7 @@ export function IndexDBProvider({ children }) {
 
     async function deleteImagesByFileName(fileNames : Array<string>) {
         const {objectStore} = openTransactionInStore(PHOTO_DBSTORE)
-        const fileNameIndex = objectStore.index('originalFileName')
+        const fileNameIndex = objectStore.index('albumPhotoID')
 
         const deletePromises = fileNames.map(async (fileName) => {
             // Get the key for the file using the index

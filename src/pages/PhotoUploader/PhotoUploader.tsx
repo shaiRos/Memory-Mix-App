@@ -148,7 +148,7 @@ const PhotoUploader = () => {
           albumImageCollection?.length ?
           (photosWithLocation?.length ?
             <div className='flex flex-nowrap justify-between'>
-              <p className='whitespace-nowrap text-sm mr-1 cursor-pointer' onClick={() => setSelectedPhotos(viewPhotoObjects.map((m: PhotoObject) => m.originalFileName))}>Select all photos</p>
+              <p className='whitespace-nowrap text-sm mr-1 cursor-pointer' onClick={() => setSelectedPhotos(viewPhotoObjects.map((m: PhotoObject) => m.albumPhotoID))}>Select all photos</p>
             </div>
             :
             <div className='text-sm text-gray-400 italic pt-2 mx-4'>
@@ -180,7 +180,7 @@ const PhotoUploader = () => {
         </div>
         <div className='grid grid-cols-4 gap-3 px-2'>
           {viewPhotoObjects.map((imageObject: PhotoObject, index) => (
-            <PhotoSelectionPreviewCard key={imageObject.originalFileName} imageObject={imageObject} selectedPhotos={selectedPhotos} setSelectedPhotos={setSelectedPhotos} />
+            <PhotoSelectionPreviewCard key={imageObject.albumPhotoID} imageObject={imageObject} selectedPhotos={selectedPhotos} setSelectedPhotos={setSelectedPhotos} />
           ))}
         </div>
         
@@ -218,24 +218,24 @@ const PhotoUploader = () => {
 };
 
 function PhotoSelectionPreviewCard({ imageObject, selectedPhotos, setSelectedPhotos }: { imageObject: PhotoObject, selectedPhotos: string[], setSelectedPhotos: () => void }) {
-  const [selected, setSelected] = useState(selectedPhotos.includes(imageObject.originalFileName))
+  const [selected, setSelected] = useState(selectedPhotos.includes(imageObject.albumPhotoID))
 
   function selectImage(el) {
-    if (selectedPhotos.includes(imageObject.originalFileName)) {
+    if (selectedPhotos.includes(imageObject.albumPhotoID)) {
       // If photo is already selected, unselect it
-      setSelectedPhotos(selectedPhotos.filter(photoId => photoId !== imageObject.originalFileName));
+      setSelectedPhotos(selectedPhotos.filter(photoId => photoId !== imageObject.albumPhotoID));
     } else {
       // If photo is not selected, add it to the selected list
-      setSelectedPhotos([...selectedPhotos, imageObject.originalFileName]);
+      setSelectedPhotos([...selectedPhotos, imageObject.albumPhotoID]);
     }
   }
 
   useEffect(() => {
-    setSelected(selectedPhotos.includes(imageObject.originalFileName))
+    setSelected(selectedPhotos.includes(imageObject.albumPhotoID))
   }, [selectedPhotos])
 
   return (
-    <div key={imageObject.originalFileName} className={`photo-selection-preview ${selected && 'selected'}`} onClick={selectImage}>
+    <div key={imageObject.albumPhotoID} className={`photo-selection-preview ${selected && 'selected'}`} onClick={selectImage}>
       <img src={URL.createObjectURL(imageObject.smallPreviewBlob)} alt="Preview" style={{ height: 'auto', objectFit: 'cover', aspectRatio: '1/1' }} />
     </div>
   )
