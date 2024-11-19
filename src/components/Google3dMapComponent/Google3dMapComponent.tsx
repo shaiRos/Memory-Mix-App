@@ -11,9 +11,10 @@ let apiConfig = {
 	loaderConfig: config?.loaderConfig
 }
 
-if (import.meta.env.VITE_GOOGLE_API_KEY) {
+if (import.meta.env.VITE_GOOGLE_API_KEY || process && process.env.VITE_GOOGLE_API_KEY) {
+	let envVariables = import.meta?.env || process.env
 	apiConfig.loaderConfig = {
-		apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
+		apiKey: envVariables.VITE_GOOGLE_API_KEY,
 		version: "alpha",
 	}
 }
