@@ -44,7 +44,7 @@ const PhotoUploader = () => {
   const handleFileChange = async (event) => {
     setIsUploading(true)
     const selectedFiles : File[] = Array.from(event.target.files);
-    console.log({uploadedFiles: selectedFiles})
+    // console.log({uploadedFiles: selectedFiles})
 
     // prepare for upload 
     // make the photos objects
@@ -94,7 +94,7 @@ const PhotoUploader = () => {
 
     }
 
-    console.log(photoObjects)
+    // console.log(photoObjects)
 
     await storeImages(photoObjects)
     setIsUploading(false)

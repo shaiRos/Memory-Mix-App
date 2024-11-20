@@ -42,9 +42,28 @@ export default function NearbyPlaces() {
         // Epsilon: max distance between points (e.g., 0.1 for 100 meters), minPoints: minimum points in a cluster
         let cluster_centroids = getClusterCentroids(dataset, 0.004, 1) // very precise, inaccurate if 0.005
         let cluster_centroids_latlngObj = cluster_centroids.map(l => ({ lat: l[0], lng: l[1] }))
+        
         // console.log(`there are ${cluster_centroids_latlngObj.length} centroids`)
+        // uncomment to visualize clusters in the map
+        // cluster_centroids_latlngObj.forEach((cluster,i) => {
+        //     const marker = new google.maps.maps3d.Marker3DInteractiveElement({
+        //         position: { lat: cluster.lat, lng: cluster.lng, altitude: 50 },
+        //         altitudeMode: 'RELATIVE_TO_GROUND',
+        //         label: i.toString(),
+        //         extruded: true,
+        //     });
+        //     const pinBackground = new google.maps.marker.PinElement({
+        //         background: "#eba747",
+        //         glyphColor: 'white',
+        //         borderColor: 'white',
+        //         scale: 1.5
+        //     });
+            
+        //     marker.append(pinBackground)
+        //     map.append(marker)
+        // })
 
-        let nearbyPlacesFetchResults = await Promise.all(cluster_centroids_latlngObj.map(centroid => fetchNearbyPlaces(centroid)))
+        let nearbyPlacesFetchResults = await Promise.all(cluster_centroids_latlngObj.map((centroid,index) => fetchNearbyPlaces(centroid,index)))
 
         for (let nearbyPlaces of nearbyPlacesFetchResults) {
             if (nearbyPlaces?.length) {
@@ -108,7 +127,7 @@ export default function NearbyPlaces() {
 
 
 // Function to fetch nearby places from Google API (if not in localStorage)
-async function fetchNearbyPlaces(centroid: { lat: number, lng: number }) {
+async function fetchNearbyPlaces(centroid: { lat: number, lng: number },index) {
     const existingData = getNearbyFromLocalStorage(centroid);
 
     if (existingData) {
@@ -118,7 +137,7 @@ async function fetchNearbyPlaces(centroid: { lat: number, lng: number }) {
 
     // If no cached data, make API request
     const places = await nearbySearch(centroid)
-    console.log('Fetched new nearby places data, storing in cache:', { centroid: centroid, places: places });
+    // console.log(`Fetched new nearby places data for Cluster ${index}, storing in cache:`, { centroid: centroid, places: places });
     storeNearbyPlaces(centroid, places); // Store in localStorage
 
 
@@ -148,8 +167,19 @@ async function nearbySearch(point: { lat: number, lng: number }) {
         region: 'us',
     };
 
+    let maxRadius = 300
+
     //@ts-ignore
-    const { places } = await Place.searchNearby(request);
+    let places = []
+
+    // widen radius if results didn't find any place, until you hit a maximum radius
+    while (request.locationRestriction.radius < maxRadius && places?.length < 2) {
+        const placesResults = await Place.searchNearby(request);
+        places = placesResults?.places || []
+        request.locationRestriction.radius += 50
+    }
+
+
 
     if (places.length) {
         let placesJSON = places.map(p => p.toJSON())
@@ -162,7 +192,6 @@ async function nearbySearch(point: { lat: number, lng: number }) {
         return placesJSON
 
     } else {
-        console.log("No results");
         return []
     }
 }
