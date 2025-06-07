@@ -134,6 +134,7 @@ export default function Google3DMapComponent() {
 				center: { lat: 43.6425, lng: -79.3871, altitude: 400 },
 				range: 1000,
 				tilt: 60,
+				mode: 'HYBRID'
 			});
 			map3DElement.defaultLabelsDisabled = true;
 
